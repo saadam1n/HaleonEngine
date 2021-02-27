@@ -1,11 +1,11 @@
 unset(HaleonEngine CACHE)
 
-set(HaleonSupportedGraphicsAPIs "OpenGL3" "Vulkan" "Direct3D9" "Direct3D10 (not yet supported)" "Direct3D11" "Direct3D12")
+set(HaleonSupportedGraphicsAPIs "OpenGL3" "Direct3D9")
 set(HaleonSelectedGraphicsAPI "OpenGL3" CACHE STRING "The graphics API used for rendering")
 set_property(CACHE HaleonSelectedGraphicsAPI PROPERTY STRINGS ${HaleonSupportedGraphicsAPIs})
 
 function(HaleonAddFolder FileList FileListData path)
-    file(GLOB_RECURSE FolderSources "${path}/*.h" "${path}/*.hpp" "${path}/*.c" "${path}/*.cpp" "${path}/*.cc")
+    file(GLOB_RECURSE FolderSources CONFIGURE_DEPENDS "${path}/*.h" "${path}/*.hpp" "${path}/*.c" "${path}/*.cpp" "${path}/*.cc" )
     set(${FileList} ${FileListData} ${FolderSources} PARENT_SCOPE)
 endfunction()
 
@@ -25,7 +25,7 @@ if(HaleonGraphicsAPIIndex EQUAL 0)
     HaleonAddFolder(HaleonSources "${HaleonSources}" "OpenGL3")
     list(APPEND HaleonLibraries "libglew_static")
     list(APPEND HaleonDefines "HALEON_GRAPHICS_API_OPENGL3")
-elseif(HaleonGraphicsAPIIndex EQUAL 2)   
+elseif(HaleonGraphicsAPIIndex EQUAL 1)   
     HaleonAddFolder(HaleonSources "${HaleonSources}" "Direct3D9")
     list(APPEND HaleonLibraries "d3d9" "dxgi")
     list(APPEND HaleonDefines "HALEON_GRAPHICS_API_DIRECT3D9")
