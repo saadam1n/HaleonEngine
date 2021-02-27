@@ -46,12 +46,12 @@ namespace Haleon {
 			DebugLog0("Video subsystem was unable initialize. SDL2 error: "s << SDL_GetError() << LogFlush);
 			abort();
 		}
-		DebugLog1(COFFEE_SEVERITY_INFO << "Coffee has initialized successfully" << LogFlush);
+		DebugLog1(COFFEE_SEVERITY_INFO << "Haleon has initialized successfully" << LogFlush);
 	}
 
 	void Terminate(void) {
 		SDL_VideoQuit();
-		DebugLog1(COFFEE_SEVERITY_INFO << "Coffee has terminated successfully" << LogFlush);
+		DebugLog1(COFFEE_SEVERITY_INFO << "Haleon has terminated successfully" << LogFlush);
 	}
 
 }
