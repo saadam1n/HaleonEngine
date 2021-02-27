@@ -1,0 +1,15 @@
+[submodule "lib/SDL2"]
+	path = lib/SDL2
+	url = https://github.com/libsdl-org/SDL
+[submodule "lib/GLEW"]
+	path = lib/GLEW
+	url = https://github.com/Perlmint/glew-cmake
+[submodule "lib/Krypton"]
+	path = lib/Krypton
+	url = https://github.com/Shadax-stack/Krypton
+[submodule "lib/libconsole"]
+	path = lib/libconsole
+	url = https://github.com/Shadax-stack/libconsole
+[submodule "lib/GLM"]
+	path = lib/GLM
+	url = https://github.com/g-truc/glm

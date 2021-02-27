@@ -1,0 +1,6 @@
+#ifndef COFFEE_KERNEL_MEMORY_H
+#define COFFEE_KERNEL_MEMORY_H
+
+
+
+#endif
