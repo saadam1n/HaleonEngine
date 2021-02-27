@@ -1,4 +1,4 @@
-#include "CoreRenderer.h"
+#include "GLCoreRenderer.h"
 #include <GL/glew.h>
 
 namespace Haleon {

@@ -2,9 +2,9 @@
 #define HALEON_GRAPHICS_GRAPHICS_WINDOW_H
 
 #ifdef HALEON_GRAPHICS_API_OPENGL3
-#include "../OpenGL3/GraphicsWindow.h"
+#include "../OpenGL3/GLGraphicsWindow.h"
 #else
-#include "../Direct3D9/GraphicsWindow.h"
+#include "../Direct3D9/D3D9GraphicsWindow.h"
 #endif
 
 #endif
