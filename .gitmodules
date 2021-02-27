@@ -10,3 +10,6 @@
 [submodule "lib/GLM"]
 	path = lib/GLM
 	url = https://github.com/g-truc/glm
+[submodule "lib/SDL2"]
+	path = lib/SDL2
+	url = https://github.com/Shadax-stack/SDL
