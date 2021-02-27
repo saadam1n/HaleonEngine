@@ -368,7 +368,6 @@ FodyWeavers.xsd
 /.vs/
 /bin/
 /build/
-/lib/
 /obj/
 
 /*.gradle

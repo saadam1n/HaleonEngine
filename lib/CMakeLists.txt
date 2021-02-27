@@ -1,0 +1,15 @@
+set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(SDL_SHARED OFF CACHE BOOL "" FORCE)
+set(BUILD_DYNAMIC_LIBS OFF CACHE BOOL "" FORCE)
+set(BUILD_EXAMPLE_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
+
+add_subdirectory(GLEW)
+add_subdirectory(GLM)
+add_subdirectory(SDL2)
+add_subdirectory(libconsole)
+
+set_target_properties(SDL2-static PROPERTIES FOLDER lib)
+set_target_properties(SDL2main PROPERTIES FOLDER lib)
+set_target_properties(libglew_static PROPERTIES FOLDER lib)
+set_target_properties(libconsole_c PROPERTIES FOLDER lib)
