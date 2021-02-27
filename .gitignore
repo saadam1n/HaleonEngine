@@ -369,6 +369,8 @@ FodyWeavers.xsd
 /bin/
 /build/
 /obj/
+/lib/
+!/lib/CMakeLists.txt
 
 /*.gradle
 /*.iml
