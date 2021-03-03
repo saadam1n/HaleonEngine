@@ -137,12 +137,20 @@ namespace Haleon {
 	}
 
 	void CoreRenderer::Free(void) {
+		// Make sure the GPU is down executing all commands before freeing any resources. In a way this prevents a resource hazard that arises from synch issues
+		CommandFence.Synchronize(CommandQueue);
+
+		// Free swap chain resources 
+		SwapChainRTVHeap->Release();
+		for (UINT Index = 0; Index < HALEON_DIRECT3D12_BUFFER_COUNT; Index++) {
+			SwapChainBuffers[Index]->Release();
+		}
+		SwapChain->Release();
 
 		// TODO: free the swap chain resources
 		FreeFence(&CommandFence);
 		FreeCommandRecorder(&CommandList);
 
-		SwapChain->Release();
 		CommandQueue->Release();
 		Device->Release();
 	}
