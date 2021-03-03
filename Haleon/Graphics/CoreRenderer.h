@@ -2,7 +2,7 @@
 #define HALEON_GRAPHICS_CORE_RENDERER_H
 
 #if defined(HALEON_GRAPHICS_API_OPENGL3)
-#include "../OpenGL3/GLCoreRenderer.h"
+#include "../OpenGL3/GL3CoreRenderer.h"
 #elif defined(HALEON_GRAPHICS_API_DIRECT3D9)
 #include "../Direct3D9/D3D9CoreRenderer.h"
 #elif defined(HALEON_GRAPHICS_API_DIRECT3D10)

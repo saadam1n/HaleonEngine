@@ -5,14 +5,12 @@
 #include "../Graphics/Frame.h"
 #include <directx/d3dx12.h>
 #include <dxgi.h>
-#include "D3D12Fence.h"
+#include "D3D12Sync.h"
 #include "D3D12CommandRecorder.h"
 
 #define HALEON_DIRECT3D12_BUFFER_COUNT 2 
 
 namespace Haleon {
-	
-	class Fence;
 
 	class CoreRenderer {
 	public:
@@ -29,9 +27,9 @@ namespace Haleon {
 		// I might move these methods out of public
 
 		// Function that creates a fence
-		void CreateFence(Fence* Fence);
+		void CreateFence(Synchronizer* Fence);
 		// Function that frees a fence
-		void FreeFence(Fence* Fence);
+		void FreeFence(Synchronizer* Fence);
 
 		// Create a command recorder
 		void CreateCommandRecorder(CommandRecorder* CommandRecorderObject, UINT NodeMask);
@@ -54,7 +52,7 @@ namespace Haleon {
 		// The command list
 		CommandRecorder CommandList;
 		// The fence object we use for sync.
-		Fence CommandFence;
+		Synchronizer CommandFence;
 
 		// Swap chain resources. TODO: move this into a class
 		IDXGISwapChain* SwapChain;

@@ -1,5 +1,4 @@
 #include "D3D12CoreRenderer.h"
-#include "D3D12Fence.h"
 #include <iostream>
 
 namespace Haleon {
@@ -32,7 +31,7 @@ namespace Haleon {
 
 
 		// Initialized the device. I'm not using very new features so feature level 11.0 works
-		D3D12CreateDevice(Adapter, D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&Device));
+		D3D12CreateDevice(Adapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&Device));
 		
 		// Initialize the command queue
 		D3D12_COMMAND_QUEUE_DESC CommandQueueDesc;
@@ -110,7 +109,7 @@ namespace Haleon {
 		
 	}
 
-	void CoreRenderer::CreateFence(Fence* Fence) {
+	void CoreRenderer::CreateFence(Synchronizer* Fence) {
 		Fence->FenceValue = 0   ;
 		Fence->FencePoint = NULL;
 		Fence->FenceEvent = NULL;
@@ -119,7 +118,7 @@ namespace Haleon {
 		Fence->FenceEvent = CreateEventEx(NULL, NULL, CREATE_EVENT_MANUAL_RESET, EVENT_ALL_ACCESS);
 	}
 
-	void CoreRenderer::FreeFence(Fence* Fence) {
+	void CoreRenderer::FreeFence(Synchronizer* Fence) {
 		CloseHandle(Fence->FenceEvent);
 		Fence->FencePoint->Release();
 	}
@@ -182,7 +181,8 @@ namespace Haleon {
 	}
 
 	void CoreRenderer::ClearBuffer(void) {
-		const static float Color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		const static float Color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		
 		CommandList->ClearRenderTargetView(GetCurrentBackBufferRTV(), Color, 0, NULL);
 	}
 

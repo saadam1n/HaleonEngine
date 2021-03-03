@@ -1,11 +1,11 @@
-#ifndef HALEON_DIRECT3D12_FENCE_H
-#define HALEON_DIRECT3D12_FENCE_H
+#ifndef HALEON_DIRECT3D12_SYNC_H
+#define HALEON_DIRECT3D12_SYNC_H
 
 #include <directx/d3d12.h>
 
 namespace Haleon {
 
-	class Fence {
+	class Synchronizer {
 	public:
 		void Synchronize(ID3D12CommandQueue* Queue, DWORD Milliseconds = 1000);
 	protected:

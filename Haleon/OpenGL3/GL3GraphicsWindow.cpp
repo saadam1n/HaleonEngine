@@ -1,4 +1,4 @@
-#include "GLGraphicsWindow.h"
+#include "GL3GraphicsWindow.h"
 #include <GL/glew.h>
 
 namespace Haleon {

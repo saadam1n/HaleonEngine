@@ -1,9 +1,9 @@
-#include "D3D12Fence.h"
+#include "D3D12Sync.h"
 #include "../Kernel/Haleon.h"
 
 namespace Haleon {
 
-	void Fence::Synchronize(ID3D12CommandQueue* Queue, DWORD Milliseconds) {
+	void Synchronizer::Synchronize(ID3D12CommandQueue* Queue, DWORD Milliseconds) {
 		FenceValue++;
 		Queue->Signal(FencePoint, FenceValue);
 		if (FencePoint->GetCompletedValue() < FenceValue) {
