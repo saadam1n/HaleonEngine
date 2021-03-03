@@ -13,3 +13,6 @@
 [submodule "lib/SDL2"]
 	path = lib/SDL2
 	url = https://github.com/Shadax-stack/SDL
+[submodule "lib/DirectX-Headers"]
+	path = lib/DirectX-Headers
+	url = https://github.com/microsoft/DirectX-Headers

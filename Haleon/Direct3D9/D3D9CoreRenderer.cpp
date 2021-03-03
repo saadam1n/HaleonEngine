@@ -22,10 +22,14 @@ namespace Haleon {
 		D3DPRESENT_PARAMETERS PresentParameters;
 		ZeroMemory(&PresentParameters, sizeof(PresentParameters));
 
+		// Set up windowing information
 		PresentParameters.Windowed = TRUE;
-		PresentParameters.hDeviceWindow = Window->DriverInfo.info.win.window;
+		PresentParameters.hDeviceWindow = Window->GetWindowHandleWin32();
+		// Set up swap chain information
+		PresentParameters.BackBufferCount = 1;
 		PresentParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
 
+		// Create the device
 		Direct3D9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, PresentParameters.hDeviceWindow, D3DCREATE_HARDWARE_VERTEXPROCESSING, &PresentParameters, &Device);
 	}
 

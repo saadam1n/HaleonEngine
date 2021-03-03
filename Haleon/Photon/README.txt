@@ -1,0 +1,1 @@
+This is a software implementation of the rendering API abstraction toolkit

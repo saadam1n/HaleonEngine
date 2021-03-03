@@ -16,6 +16,7 @@ namespace Haleon {
 		WindowID = SDL_GetWindowID(Window);
 		DebugLog2(COFFEE_SEVERITY_INFO << "New window ID is: " << WindowID << LogFlush);
 		CurrentState.Open = true;
+		CurrentState.Size = Params.Size;
 		CreateGraphics();
 	}
 

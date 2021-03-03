@@ -402,3 +402,4 @@ CTestTestfile.cmake
 _deps
 *.dir
 *.cmake
+x64

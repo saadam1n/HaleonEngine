@@ -9,6 +9,10 @@ void operator delete(void* addr, size_t bytes);
 
 #define HALEON_ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
 
+#ifndef NDEBUG
+#define HALEON_DEBUG
+#endif
+
 namespace Haleon {
 
 	struct AllocationInfo {

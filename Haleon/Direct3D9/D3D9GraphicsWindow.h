@@ -2,19 +2,14 @@
 #define HALEON_DIRECT3D9_GRAPHICS_WINDOW_H
 
 #include "../Window/Window.h"
+#include "../DxCore/DxCoreBaseWindow.h"
 #include <SDL_syswm.h>
 
 namespace Haleon {
 
-	class GraphicsWindow : public BaseWindow {
+	class GraphicsWindow : public DxCoreBaseWindow {
 	protected:
 		friend class CoreRenderer;
-
-		virtual uint32_t GetAPIFlags(void) final override;
-		virtual void CreateGraphics(void)  final override;
-		virtual void DestroyGraphics(void) final override;
-
-		SDL_SysWMinfo DriverInfo;
 	};
 
 }

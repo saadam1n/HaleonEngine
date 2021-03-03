@@ -1,12 +1,14 @@
-#ifndef HALEON_OPENGL3_CORE_RENDERER_H
-#define HALEON_OPENGL3_CORE_RENDERER_H
+#ifndef HALEON_DIRECT3D11_CORE_RENDERER
+#define HALEON_DIRECT3D11_CORE_RENDERER
 
-#include "GLGraphicsWindow.h"
+#include "D3D10GraphicsWindow.h"
 #include "../Graphics/Frame.h"
+#include <d3d10.h>
+#include <dxgi.h>
 
 namespace Haleon {
 
-	class CoreRenderer : public BaseObject {
+	class CoreRenderer {
 	public:
 		// Set up the renderer using the specified window. This is the "constructor" of the renderer.
 		void Create(GraphicsWindow* Window);
@@ -23,6 +25,13 @@ namespace Haleon {
 		void ClearBuffer(void);
 		// Swap the buffers in the swap chain
 		void SwapBuffers(void);
+
+		// The Direct3D11 device used for rendering 
+		ID3D10Device* Device;
+		// Swap chain
+		IDXGISwapChain* SwapChain;
+		ID3D10Texture2D* BackBuffer;
+		ID3D10RenderTargetView* BackBufferRTV;
 
 		// The window that the renderer was creating using. 
 		GraphicsWindow* WindowContext;
