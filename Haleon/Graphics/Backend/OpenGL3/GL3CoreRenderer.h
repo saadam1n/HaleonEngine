@@ -1,8 +1,8 @@
-#ifndef HALEON_OPENGL3_CORE_RENDERER_H
-#define HALEON_OPENGL3_CORE_RENDERER_H
+#ifndef HALEON_GRAPHICS_BACKEND_OPENGL3_CORE_RENDERER_H
+#define HALEON_GRAPHICS_BACKEND_OPENGL3_CORE_RENDERER_H
 
 #include "GL3GraphicsWindow.h"
-#include "../Graphics/Frame.h"
+#include "../../Frame.h"
 
 namespace Haleon {
 

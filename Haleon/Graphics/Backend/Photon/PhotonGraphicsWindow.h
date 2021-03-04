@@ -1,7 +1,7 @@
-#ifndef HALEON_PHOTON_GRAPHICS_WINDOW_H
-#define HALEON_PHOTON_GRAPHICS_WINDOW_H
+#ifndef HALEON_GRAPHICS_BACKEND_PHOTON_GRAPHICS_WINDOW_H
+#define HALEON_GRAPHICS_BACKEND_PHOTON_GRAPHICS_WINDOW_H
 
-#include "../Window/Window.h"
+#include "../../../Window/Window.h"
 
 namespace Haleon {
 

@@ -1,8 +1,8 @@
-#ifndef HALEON_DIRECT3D11_CORE_RENDERER
-#define HALEON_DIRECT3D11_CORE_RENDERER
+#ifndef HALEON_GRAPHICS_BACKEND_DIRECT3D10_CORE_RENDERER
+#define HALEON_GRAPHICS_BACKEND_DIRECT3D10_CORE_RENDERER
 
 #include "D3D10GraphicsWindow.h"
-#include "../Graphics/Frame.h"
+#include "../../Frame.h"
 #include <d3d10.h>
 #include <dxgi.h>
 

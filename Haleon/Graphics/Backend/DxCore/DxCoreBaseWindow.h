@@ -1,7 +1,7 @@
 #ifndef HALEON_DXCORE_BASE_WINDOW_H
 #define HALEON_DXCORE_BASE_WINDOW_H
 
-#include "../Window/Window.h"
+#include "../../../Window/Window.h"
 #include <SDL_syswm.h>
 #include <Windows.h>
 

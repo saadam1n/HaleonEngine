@@ -1,8 +1,8 @@
 // Copyright 2021 fuzdex
-#ifndef HALEON_OPENGL3_GRAPHICS_WINDOW_H
-#define HALEON_OPENGL3_GRAPHICS_WINDOW_H
+#ifndef HALEON_GRAPHICS_BACKEND_OPENGL3_GRAPHICS_WINDOW_H
+#define HALEON_GRAPHICS_BACKEND_OPENGL3_GRAPHICS_WINDOW_H
 
-#include "../Window/Window.h"
+#include "../../../Window/Window.h"
 
 namespace Haleon {
 
@@ -22,5 +22,5 @@ namespace Haleon {
 #endif
 
 #ifndef HALEON_GRAPHICS_API_OPENGL3
-#error Please select OpenGL3 in cmake to include this file
+//#error Please select OpenGL3 in cmake to include this file
 #endif

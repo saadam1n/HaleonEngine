@@ -147,10 +147,11 @@ namespace Haleon {
 		}
 		SwapChain->Release();
 
-		// TODO: free the swap chain resources
+		// Free command exec compoenents
 		FreeFence(&CommandFence);
 		FreeCommandRecorder(&CommandList);
 
+		// Free core components
 		CommandQueue->Release();
 		Device->Release();
 	}

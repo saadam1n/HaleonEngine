@@ -1,8 +1,8 @@
-#ifndef HALEON_OPENGL3_CORE_RENDERER_H
-#define HALEON_OPENGL3_CORE_RENDERER_H
+#ifndef HALEON_GRAPHICS_BACKEND_PHOTON_CORE_RENDERER_H
+#define HALEON_GRAPHICS_BACKEND_PHOTON_CORE_RENDERER_H
 
 #include "PhotonGraphicsWindow.h"
-#include "../Graphics/Frame.h"
+#include "../../Frame.h"
 #include <GL/glew.h>
 
 namespace Haleon {

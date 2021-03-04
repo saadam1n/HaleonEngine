@@ -1,14 +1,14 @@
-#ifndef HALEON_OPENGL3_CORE_RENDERER_H
-#define HALEON_OPENGL3_CORE_RENDERER_H
+#ifndef HALEON_GRAPHICS_BACKEND_DIRECT3D11_CORE_RENDERER
+#define HALEON_GRAPHICS_BACKEND_DIRECT3D11_CORE_RENDERER
 
-#include "D3D9GraphicsWindow.h"
-#include "../Graphics/Frame.h"
-#include <d3d9.h>
+#include "D3D11GraphicsWindow.h"
+#include "../../Frame.h"
+#include <d3d11.h>
+#include <dxgi.h>
 
 namespace Haleon {
 
-	// TODO: create BaseCoreRenderer object
-	class CoreRenderer : public BaseObject {
+	class CoreRenderer {
 	public:
 		// Set up the renderer using the specified window. This is the "constructor" of the renderer.
 		void Create(GraphicsWindow* Window);
@@ -26,20 +26,20 @@ namespace Haleon {
 		// Swap the buffers in the swap chain
 		void SwapBuffers(void);
 
-		// The Direct3D9 device used for rendering 
-		IDirect3DDevice9* Device;
+		// The Direct3D11 device used for rendering 
+		ID3D11Device* Device;
+		ID3D11DeviceContext* DeviceContext;
+		// Swap chain
+		IDXGISwapChain* SwapChain;
+		ID3D11Texture2D* BackBuffer;
+		ID3D11RenderTargetView* BackBufferRTV;
 
 		// The window that the renderer was creating using. 
 		GraphicsWindow* WindowContext;
 		// The current frame associated with the renderer. StartFrame and EndFrame simply copy the values from this memeber variable to the specified memeory address
 		Frame CurrentFrame;
-
 	};
 
 }
 
-#endif
-
-#ifndef HALEON_GRAPHICS_API_DIRECT3D9
-#error Please select D3D9 in Cmake to include this file
 #endif

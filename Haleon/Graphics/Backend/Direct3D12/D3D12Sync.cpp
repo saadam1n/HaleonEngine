@@ -1,5 +1,5 @@
 #include "D3D12Sync.h"
-#include "../Kernel/Haleon.h"
+#include "../../../Kernel/Haleon.h"
 
 namespace Haleon {
 
@@ -9,7 +9,6 @@ namespace Haleon {
 		if (FencePoint->GetCompletedValue() < FenceValue) {
 			FencePoint->SetEventOnCompletion(FenceValue, FenceEvent);
 			DWORD FenceResult = WaitForSingleObject(FenceEvent, Milliseconds);
-#ifdef HALEON_DEBUG
 			if (FenceResult == WAIT_OBJECT_0) {
 				ResetEvent(FenceEvent);
 				// Success!
@@ -18,7 +17,6 @@ namespace Haleon {
 				// Uh oh, error handling time
 				exit(EXIT_FAILURE);
 			}
-#endif
 		}
 	}
 

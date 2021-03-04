@@ -1,8 +1,8 @@
-#ifndef HALEON_DIRECT3D12_CORE_RENDERER_H
-#define HALEON_DIRECT3D12_CORE_RENDERER_H
+#ifndef HALEON_GRAPHICS_BACKEND_DIRECT3D12_CORE_RENDERER_H
+#define HALEON_GRAPHICS_BACKEND_DIRECT3D12_CORE_RENDERER_H
 
 #include "D3D12GraphicsWindow.h"
-#include "../Graphics/Frame.h"
+#include "../../Frame.h"
 #include <directx/d3dx12.h>
 #include <dxgi.h>
 #include "D3D12Sync.h"
