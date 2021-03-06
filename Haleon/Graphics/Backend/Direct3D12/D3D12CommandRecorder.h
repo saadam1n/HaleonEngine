@@ -22,6 +22,7 @@ namespace Haleon {
 		operator ID3D12GraphicsCommandList* (void);
 	protected:
 		friend class CoreRenderer;
+		friend class CommandExecutor;
 		ID3D12CommandAllocator* CommandAllocator;
 		ID3D12GraphicsCommandList* CommandList;
 	};

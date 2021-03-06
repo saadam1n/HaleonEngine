@@ -16,3 +16,6 @@
 [submodule "lib/DirectX-Headers"]
 	path = lib/DirectX-Headers
 	url = https://github.com/microsoft/DirectX-Headers
+[submodule "lib/vk-bootstrap"]
+	path = lib/vk-bootstrap
+	url = https://github.com/charles-lunarg/vk-bootstrap

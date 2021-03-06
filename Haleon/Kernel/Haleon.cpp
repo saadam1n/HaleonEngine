@@ -38,18 +38,26 @@ void operator delete(void* addr, size_t bytes) {
 
 namespace Haleon {
 
+	extern void GraphicsBackendInitialize(void);
+	extern void GraphicsBackendTerminate(void);
+
 	void Initialize(void) {
 		// Main thread in this case refers to the thread Haleon was initialized with
 		CurrentThreadInfo.Debug.SetName("Main");
+
 		if (SDL_VideoInit(nullptr) == -1) {
 			using namespace std::literals;
 			DebugLog0("Video subsystem was unable initialize. SDL2 error: "s << SDL_GetError() << LogFlush);
 			abort();
 		}
+
+		GraphicsBackendInitialize();
+
 		DebugLog1(COFFEE_SEVERITY_INFO << "Haleon has initialized successfully" << LogFlush);
 	}
 
 	void Terminate(void) {
+		GraphicsBackendTerminate();
 		SDL_VideoQuit();
 		DebugLog1(COFFEE_SEVERITY_INFO << "Haleon has terminated successfully" << LogFlush);
 	}

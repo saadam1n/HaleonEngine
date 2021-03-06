@@ -7,6 +7,9 @@
 #include <dxgi.h>
 #include "D3D12Sync.h"
 #include "D3D12CommandRecorder.h"
+#include "D3D12DeviceWrapper.h"
+#include "D3D12SwapChain.h"
+#include "D3D12CommandExec.h"
 
 #define HALEON_DIRECT3D12_BUFFER_COUNT 2 
 
@@ -42,23 +45,17 @@ namespace Haleon {
 		// Swap the buffers in the swap chain
 		void SwapBuffers(void);
 
-		// Gets the current back buffer
-		D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentBackBufferRTV(void);
-
 		// The D3D12 Device
-		ID3D12Device* Device;
+		DeviceWrapper Device;
 		// The command queue. For simplicity I only use one global command queue for the entire renderer
-		ID3D12CommandQueue* CommandQueue;
+		CommandExecutor CommandQueue;
 		// The command list
 		CommandRecorder CommandList;
 		// The fence object we use for sync.
 		Synchronizer CommandFence;
 
-		// Swap chain resources. TODO: move this into a class
-		IDXGISwapChain* SwapChain;
-		ID3D12DescriptorHeap* SwapChainRTVHeap;
-		ID3D12Resource* SwapChainBuffers[HALEON_DIRECT3D12_BUFFER_COUNT];
-		UINT CurrentBufferIndex;
+		// Swap chain resources.
+		SwapChainWrapper SwapChain;
 
 		// The window that the renderer was creating using. 
 		GraphicsWindow* WindowContext;

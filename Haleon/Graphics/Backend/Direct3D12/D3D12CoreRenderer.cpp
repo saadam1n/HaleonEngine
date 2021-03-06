@@ -31,18 +31,22 @@ namespace Haleon {
 
 
 		// Initialized the device. I'm not using very new features so feature level 11.0 works
-		D3D12CreateDevice(Adapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&Device));
+		D3D12CreateDevice(Adapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(Device.GetInternalDevice()));
+		Device.NodeMask = AdapterNodeMask;
+		Device.DescriptorSizes.RTV         = Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV        );
+		Device.DescriptorSizes.DSV         = Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV        );
+		Device.DescriptorSizes.CBV_SRV_UAV = Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 		
 		// Initialize the command queue
 		D3D12_COMMAND_QUEUE_DESC CommandQueueDesc;
 		CommandQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 		CommandQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_HIGH;
 		CommandQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-		CommandQueueDesc.NodeMask = AdapterNodeMask;
-		Device->CreateCommandQueue(&CommandQueueDesc, IID_PPV_ARGS(&CommandQueue));
+		CommandQueueDesc.NodeMask = Device.GetNodeMask();
+		Device->CreateCommandQueue(&CommandQueueDesc, IID_PPV_ARGS(CommandQueue.GetInternalCommandQueue()));
 
 		// Initialize the things we need to start recording commands
-		CreateCommandRecorder(&CommandList, AdapterNodeMask);
+		CreateCommandRecorder(&CommandList, Device.GetNodeMask());
 
 		// Set up the fence
 		CreateFence(&CommandFence);
@@ -52,7 +56,7 @@ namespace Haleon {
 		//ZeroMemory(&SwapChainDesc, sizeof(SwapChainDesc));
 		// Bind the swap chain to the window
 		SwapChainDesc.OutputWindow = Window->GetWindowHandleWin32();
-		SwapChainDesc.Windowed = true; // TODO: add a method to the window base class to tell whether the window is windowed or fullscreen
+		SwapChainDesc.Windowed = TRUE; // TODO: add a method to the window base class to tell whether the window is windowed or fullscreen
 		// Disable MSAA (for now)
 		SwapChainDesc.SampleDesc.Count = 1;
 		SwapChainDesc.SampleDesc.Quality = 0;
@@ -70,24 +74,9 @@ namespace Haleon {
 		// Set swap effect and flags
 		SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 		SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-		Factory->CreateSwapChain(CommandQueue, &SwapChainDesc, &SwapChain);
 
-		// Now set up our descriptor heaps and resource views
-		D3D12_DESCRIPTOR_HEAP_DESC SwapChainRTVHeapDesc;
-		SwapChainRTVHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-		SwapChainRTVHeapDesc.NumDescriptors = SwapChainDesc.BufferCount;
-		SwapChainRTVHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		SwapChainRTVHeapDesc.NodeMask = AdapterNodeMask;
-		Device->CreateDescriptorHeap(&SwapChainRTVHeapDesc, IID_PPV_ARGS(&SwapChainRTVHeap));
-
-		SIZE_T RTVSize = Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-		D3D12_CPU_DESCRIPTOR_HANDLE RTVHandleItr = SwapChainRTVHeap->GetCPUDescriptorHandleForHeapStart();
-		for (UINT Buffer = 0; Buffer < SwapChainRTVHeapDesc.NumDescriptors; Buffer++, RTVHandleItr.ptr += RTVSize) {
-			ID3D12Resource** BufferResource = SwapChainBuffers + Buffer;
-			SwapChain->GetBuffer(Buffer, IID_PPV_ARGS(BufferResource));
-			Device->CreateRenderTargetView(*BufferResource, NULL, RTVHandleItr);
-			
-		}
+		SwapChain.Create(Factory, CommandQueue, Window, Adapter, &SwapChainDesc);
+		SwapChain.CreateResources(Device);
 		
 		D3D12_VIEWPORT Viewport;
 		Viewport.TopLeftX = 0.0f;
@@ -98,14 +87,12 @@ namespace Haleon {
 		Viewport.MaxDepth = 1.0f;
 		CommandList->RSSetViewports(1, &Viewport);
 		CommandList.End();
-		CommandQueue->ExecuteCommandLists(1, (ID3D12CommandList**)&CommandList.CommandList);
+		CommandQueue.Execute(&CommandList);
 		CommandFence.Synchronize(CommandQueue);
 
 		Output->Release();
 		Adapter->Release();
 		Factory->Release();
-
-		CurrentBufferIndex = 0;
 		
 	}
 
@@ -141,11 +128,11 @@ namespace Haleon {
 		CommandFence.Synchronize(CommandQueue);
 
 		// Free swap chain resources 
-		SwapChainRTVHeap->Release();
+		SwapChain.DescriptorHeapRTV->Release();
 		for (UINT Index = 0; Index < HALEON_DIRECT3D12_BUFFER_COUNT; Index++) {
-			SwapChainBuffers[Index]->Release();
+			SwapChain.Buffers[Index]->Release();
 		}
-		SwapChain->Release();
+		SwapChain.SwapChainBase::SwapChain->Release();
 
 		// Free command exec compoenents
 		FreeFence(&CommandFence);
@@ -156,18 +143,12 @@ namespace Haleon {
 		Device->Release();
 	}
 
-	D3D12_CPU_DESCRIPTOR_HANDLE CoreRenderer::GetCurrentBackBufferRTV(void) {
-		D3D12_CPU_DESCRIPTOR_HANDLE RTV = SwapChainRTVHeap->GetCPUDescriptorHandleForHeapStart();
-		RTV.ptr += (SIZE_T)CurrentBufferIndex * Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-		return RTV;
-	}
-
 	void CoreRenderer::StartFrame(Frame* NewFrame) {
 		// Reset the command list
 		CommandList.Begin();
 
 		// Clear the buffer
-		CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SwapChainBuffers[CurrentBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+		CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SwapChain.GetCurrentBackBufferResource(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 		ClearBuffer();
 
 		CurrentFrame.ID++;
@@ -175,14 +156,13 @@ namespace Haleon {
 	}
 	
 	void CoreRenderer::EndFrame(Frame* CurrentFrame) {
-		CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SwapChainBuffers[CurrentBufferIndex], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+		CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(SwapChain.GetCurrentBackBufferResource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 		CommandList.End();
-		CommandQueue->ExecuteCommandLists(1, (ID3D12CommandList**)&CommandList.CommandList);
+		CommandQueue.Execute(&CommandList);
 		CommandFence.Synchronize(CommandQueue);
 		SwapBuffers();
 
-		CurrentBufferIndex++;
-		CurrentBufferIndex %= HALEON_DIRECT3D12_BUFFER_COUNT;
+		SwapChain.SelectNextBuffer();
 
 		// Until I get a more advanced system that can detect runtime errors and recover, it's either true or exit(-1) for now
 		this->CurrentFrame.Success = true;
@@ -192,11 +172,11 @@ namespace Haleon {
 	void CoreRenderer::ClearBuffer(void) {
 		const static float Color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		
-		CommandList->ClearRenderTargetView(GetCurrentBackBufferRTV(), Color, 0, NULL);
+		CommandList->ClearRenderTargetView(SwapChain.GetCurrentBackBufferRTV(Device), Color, 0, NULL);
 	}
 
 	void CoreRenderer::SwapBuffers(void) {
-		SwapChain->Present(1, 0);
+		SwapChain.SwapChain->Present(1, 0);
 	}
 
 }
